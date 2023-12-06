@@ -1,4 +1,7 @@
-import '../models/task_model.dart';
+import 'package:todo/providers/stupid_data.dart';
+import 'package:todo/widgets/adding_task_dialog.dart';
+import 'package:todo/widgets/task_card.dart';
+
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,15 +12,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Hello People
-  List<TaskModel> waitingTasks = [];
-  List<TaskModel> completedTasks = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("ToDo App"),
+        title: const Text("ToDo App" , ),
       ),
       body: DefaultTabController(
         length: 2,
@@ -43,20 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemCount: waitingTasks.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                              title: Text(waitingTasks[index].title),
-                              subtitle: Text(waitingTasks[index].decsreption),
-                              trailing: Checkbox(
-                                value: waitingTasks[index].isDone,
-                                onChanged: (value) {
-                                  setState(() {
-                                    waitingTasks[index].isDone =
-                                        !waitingTasks[index].isDone;
-                                    completedTasks.add(waitingTasks[index]);
-                                    waitingTasks.remove(waitingTasks[index]);
-                                  });
-                                },
-                              ));
+                          return TaskCard(
+                            taskModel: waitingTasks[index],
+                            onChange: () {
+                              setState(() {
+                                waitingTasks[index].isDone =
+                                    !waitingTasks[index].isDone;
+                                completedTasks.add(waitingTasks[index]);
+                                waitingTasks.remove(waitingTasks[index]);
+                              });
+                            },
+                          );
                         },
                       ),
 
@@ -68,21 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemCount: completedTasks.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                              title: Text(completedTasks[index].title),
-                              subtitle: Text(completedTasks[index].decsreption),
-                              trailing: Checkbox(
-                                value: completedTasks[index].isDone,
-                                onChanged: (value) {
-                                  setState(() {
-                                    completedTasks[index].isDone =
-                                        !completedTasks[index].isDone;
-                                    waitingTasks.add(completedTasks[index]);
-                                    completedTasks
-                                        .remove(completedTasks[index]);
-                                  });
-                                },
-                              ));
+                          return TaskCard(
+                              taskModel: completedTasks[index],
+                              onChange: () {
+                                setState(() {
+                                  completedTasks[index].isDone =
+                                      !completedTasks[index].isDone;
+                                  waitingTasks.add(completedTasks[index]);
+                                  completedTasks.remove(completedTasks[index]);
+                                });
+                              });
                         },
                       ),
               ]),
@@ -92,11 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
-            waitingTasks.add(TaskModel(
-                title: "title ${waitingTasks.length}",
-                decsreption: "descreption ${waitingTasks.length}",
-                createdAt: DateTime.now()));
+          showDialog(
+              context: context,
+              builder: (context) {
+                return const AddingTaskDialog();
+              }).then((value) {
+            setState(() {});
           });
         },
         child: const Icon(Icons.add),

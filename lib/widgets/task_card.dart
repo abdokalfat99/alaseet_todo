@@ -1,10 +1,15 @@
+import 'package:provider/provider.dart';
+
 import '../models/task_model.dart';
+import '../providers/tasks_provider.dart';
 import 'package:flutter/material.dart';
 
 class TaskCard extends StatefulWidget {
-  const TaskCard({super.key, required this.taskModel, required this.onChange});
+  const TaskCard({
+    super.key,
+    required this.taskModel,
+  });
   final TaskModel taskModel;
-  final Function onChange;
   @override
   State<TaskCard> createState() => _TaskCardState();
 }
@@ -14,11 +19,12 @@ class _TaskCardState extends State<TaskCard> {
   Widget build(BuildContext context) {
     return ListTile(
         title: Text(widget.taskModel.title),
-        subtitle: Text(widget.taskModel.decsreption),
+        subtitle: Text(widget.taskModel.subtitle),
         trailing: Checkbox(
           value: widget.taskModel.isDone,
           onChanged: (value) {
-            widget.onChange();
+            Provider.of<TasksProvider>(context, listen: false)
+                .switchStatus(widget.taskModel);
           },
         ));
   }

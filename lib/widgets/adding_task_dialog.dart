@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/models/task_model.dart';
-import 'package:todo/providers/stupid_data.dart';
+
+import '../providers/tasks_provider.dart';
+import 'package:flutter/material.dart';
 
 class AddingTaskDialog extends StatefulWidget {
   const AddingTaskDialog({super.key});
@@ -12,9 +14,6 @@ class AddingTaskDialog extends StatefulWidget {
 class _AddingTaskDialogState extends State<AddingTaskDialog> {
   TextEditingController titleController = TextEditingController();
   TextEditingController subtitleController = TextEditingController();
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +63,12 @@ class _AddingTaskDialogState extends State<AddingTaskDialog> {
                     onPressed: () {
                       if (titleController.text.isNotEmpty &&
                           subtitleController.text.isNotEmpty) {
-                        waitingTasks.add(TaskModel(
-                          title: titleController.text,
-                          decsreption: subtitleController.text,
-                          createdAt: DateTime.now(),
-                        ));
-                        setState(() {});
+                        Provider.of<TasksProvider>(context, listen: false)
+                            .addNewTask(TaskModel(
+                                title: titleController.text,
+                                subtitle: subtitleController.text,
+                                createdAt: DateTime.now().toString(),
+                                isDone: false));
                         Navigator.pop(context);
                       }
                     },

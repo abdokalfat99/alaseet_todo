@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return Scaffold(
         appBar: AppBar(
           title: const Text(
-            "ToDo App",
+            "Tast of the Week",
           ),
           actions: [
             IconButton(

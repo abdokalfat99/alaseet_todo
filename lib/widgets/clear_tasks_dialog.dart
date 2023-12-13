@@ -62,3 +62,4 @@ class _ClearTasksDialogState extends State<ClearTasksDialog> {
     );
   }
 }
+
